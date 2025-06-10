@@ -55,8 +55,10 @@ jobs:
           working-directory: ./hono-server
           run: npm run build
 
-        - name: Install Serverless Framework
-          run: npm install -g serverless@3
+        - name: Install Serverless Framework and Plugins
+          run: |
+            npm install -g serverless@3
+            npm install --save-dev serverless-esbuild
 
         - name: Configure AWS credentials
           uses: aws-actions/configure-aws-credentials@v4
