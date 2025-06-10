@@ -13,3 +13,5 @@ functions:
 
 package:
   artifact: dist/index.js
+
+frameworkVersion: '3'
