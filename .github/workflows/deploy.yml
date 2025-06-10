@@ -64,4 +64,5 @@ jobs:
             aws-region: ${{ secrets.AWS_REGION }}
 
         - name: Deploy Hono Server to AWS Lambda
+          working-directory: ./hono-server
           run: serverless deploy
