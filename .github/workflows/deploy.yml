@@ -4,7 +4,8 @@ on:
     branches:
       - main
 jobs:
-    deploy:
+    deploy-vite-to-s3:
+        name: Deploy React Vite App to S3
         runs-on: ubuntu-latest
         steps:
             # Checkout the code and set up Node.js
@@ -34,6 +35,7 @@ jobs:
               run: aws s3 sync ./vite-project/dist s3://${{ secrets.S3_BUCKET_NAME }} --delete
 
     deploy-hono-to-lambda:
+      name: Deploy Hono Server to AWS Lambda
       runs-on: ubuntu-latest
 
       steps:
