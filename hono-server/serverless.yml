@@ -1,9 +1,12 @@
 service: hono-lambda
 
+frameworkVersion: '3'
+
 provider:
   name: aws
-  runtime: nodejs18.x
-  region: ${env:AWS_REGION, 'eu-central-1'}
+  runtime: nodejs20.x
+  region: eu-central-1
+  timeout: 10
 
 functions:
   app:
@@ -11,7 +14,13 @@ functions:
     events:
       - httpApi: '*'
 
-package:
-  artifact: dist/index.js
+plugins:
+  - serverless-esbuild
 
-frameworkVersion: '3'
+custom:
+  esbuild:
+    bundle: true
+    target: 'node20'
+    platform: 'node'
+    outdir: 'dist'
+    external: []
