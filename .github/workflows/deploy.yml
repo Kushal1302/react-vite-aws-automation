@@ -3,9 +3,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-      branches:
-        - main
 jobs:
     deploy:
         runs-on: ubuntu-latest
@@ -35,3 +32,36 @@ jobs:
 
             - name: Sync files to S3
               run: aws s3 sync ./vite-project/dist s3://${{ secrets.S3_BUCKET_NAME }} --delete
+
+    deploy-hono-to-lambda:
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+
+        - name: Setup Node.js
+          uses: actions/setup-node@v4
+          with:
+            node-version: 20
+
+        - name: Install Hono dependencies
+          working-directory: ./hono-server
+          run: npm ci
+
+        - name: Build the app
+          working-directory: ./hono-server
+          run: npm run build
+
+        - name: Install Serverless Framework
+          run: npm install -g serverless
+
+        - name: Configure AWS credentials
+          uses: aws-actions/configure-aws-credentials@v4
+          with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ${{ secrets.AWS_REGION }}
+
+        - name: Deploy Hono Server to AWS Lambda
+          run: serverless deploy

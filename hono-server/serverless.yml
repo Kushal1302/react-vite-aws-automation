@@ -1,0 +1,15 @@
+service: hono-lambda
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: ${env:AWS_REGION, 'eu-central-1'}
+
+functions:
+  app:
+    handler: dist/index.handler
+    events:
+      - httpApi: '*'
+
+package:
+  artifact: dist/index.js
