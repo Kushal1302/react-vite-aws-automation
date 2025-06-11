@@ -1,0 +1,33 @@
+Return-Path: <john.doe@example.com>
+Delivered-To: kushal@gmail.com
+Received: from mail.example.com by factuon.com with SMTP id ABC123;
+        Wed, 11 Jun 2025 10:00:00 +0530
+Subject: Invoice for May 2025
+From: John Doe <john.doe@example.com>
+To: kushal@gmail.com
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="BOUNDARY123"
+
+--BOUNDARY123
+Content-Type: text/plain; charset="UTF-8"
+
+Hello,
+
+Please find attached the invoice for May 2025.
+
+Regards,  
+John
+
+--BOUNDARY123
+Content-Type: application/pdf
+Content-Disposition: attachment; filename="Invoice_May_2025.pdf"
+Content-Transfer-Encoding: base64
+
+JVBERi0xLjQKJeLjz9MKMSAwIG9iago8PC9UeXBlIC9DYXRhbG9nIC9QYWdlcyAyIDAgUgo+PgplbmRv
+YmoKMiAwIG9iago8PC9UeXBlIC9QYWdlcyAvS2lkcyBbMyAwIFJdIC9Db3VudCAxCj4+CmVuZG9iagoz
+IDAgb2JqCjw8L1R5cGUgL1BhZ2UgL1BhcmVudCAyIDAgUiAvTWVkaWFCb3ggWzAgMCA2MTIgNzkyXSAv
+Q29udGVudHMgNCAwIFIKL0JvcmRlciBbMCAwIDAgMF0KPj4KZW5kb2JqCjQgMCBvYmoKPDwvTGVuZ3Ro
+IDYwPj4Kc3RyZWFtCkJUIAovRm9udCA8PC9GMSA1IDAgUj4+IC9Gb250IDggMCBSIC9UZXh0IDxFeGFt
+cGxlIGludm9pY2UgdGV4dD4+CmVuZHN0cmVhbQplbmRvYmoK...
+
+--BOUNDARY123--

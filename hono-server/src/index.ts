@@ -3,6 +3,7 @@ import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { handle } from "hono/aws-lambda";
 import { sendEmail } from "./utils/mail.js";
+import { parseEmail } from "./utils/emailParser.js";
 
 const app = new Hono();
 
@@ -13,6 +14,20 @@ app.get("/", async (c) => {
     html: "<h1>Hello from Hono!</h1><p>This is a test email sent using Hono framework.</p>",
   });
   return c.text("Hello Hono! Email sent successfully.");
+});
+
+app.post("/webhook/ses", async (c) => {
+  const body = await c.req.parseBody();
+  const rawMime = body["email"] as File;
+
+  if (!rawMime) return c.json({ error: "Missing email file" }, 400);
+
+  const buffer = await rawMime.arrayBuffer();
+  const result = await parseEmail(Buffer.from(buffer));
+
+  console.log("Parsed email:", result);
+
+  return c.json({ success: true, result });
 });
 
 serve(
