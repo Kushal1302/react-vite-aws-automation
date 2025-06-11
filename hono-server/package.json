@@ -9,9 +9,11 @@
   "dependencies": {
     "@hono/node-server": "^1.14.4",
     "dotenv": "^16.5.0",
-    "hono": "^4.7.11"
+    "hono": "^4.7.11",
+    "mailparser": "^3.7.3"
   },
   "devDependencies": {
+    "@types/mailparser": "^3.4.6",
     "@types/node": "^20.11.17",
     "@types/nodemailer": "^6.4.17",
     "esbuild": "^0.25.5",
