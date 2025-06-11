@@ -1,18 +1,23 @@
 service: hono-lambda
 
-frameworkVersion: '3'
+frameworkVersion: "3"
 
 provider:
   name: aws
   runtime: nodejs20.x
   region: eu-central-1
   timeout: 10
+  environment:
+    SMTP_HOST: ${env:SMTP_HOST}
+    SMTP_PORT: ${env:SMTP_PORT}
+    SMTP_USER: ${env:SMTP_USER}
+    SMTP_PASS: ${env:SMTP_PASS}
 
 functions:
   app:
     handler: dist/index.handler
     events:
-      - httpApi: '*'
+      - httpApi: "*"
 
 plugins:
   - serverless-esbuild
@@ -20,7 +25,7 @@ plugins:
 custom:
   esbuild:
     bundle: true
-    target: 'node20'
-    platform: 'node'
-    outdir: 'dist'
+    target: "node20"
+    platform: "node"
+    outdir: "dist"
     external: []
