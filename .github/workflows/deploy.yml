@@ -4,69 +4,74 @@ on:
     branches:
       - main
 jobs:
-    deploy-vite-to-s3:
-        name: Deploy React Vite App to S3
-        runs-on: ubuntu-latest
-        steps:
-            # Checkout the code and set up Node.js
-            - name: Checkout code
-              uses: actions/checkout@v3
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                node-version: 20
+  deploy-vite-to-s3:
+    name: Deploy React Vite App to S3
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the code and set up Node.js
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-            - name: Install dependencies
-              working-directory: ./vite-project
-              run: npm ci
+      - name: Install dependencies
+        working-directory: ./vite-project
+        run: npm ci
 
-            - name: Build the app
-              working-directory: ./vite-project
-              run: npm run build
-            # Configure AWS credentials
-            - name: Configure AWS credentials
-              uses: aws-actions/configure-aws-credentials@v4
-              with:
-                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-                aws-region: ${{ secrets.AWS_REGION }}
+      - name: Build the app
+        working-directory: ./vite-project
+        run: npm run build
+      # Configure AWS credentials
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-            - name: Sync files to S3
-              run: aws s3 sync ./vite-project/dist s3://${{ secrets.S3_BUCKET_NAME }} --delete
+      - name: Sync files to S3
+        run: aws s3 sync ./vite-project/dist s3://${{ secrets.S3_BUCKET_NAME }} --delete
 
-    deploy-hono-to-lambda:
-      name: Deploy Hono Server to AWS Lambda
-      runs-on: ubuntu-latest
+  deploy-hono-to-lambda:
+    name: Deploy Hono Server to AWS Lambda
+    runs-on: ubuntu-latest
 
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-        - name: Setup Node.js
-          uses: actions/setup-node@v4
-          with:
-            node-version: 20
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-        - name: Install Hono dependencies
-          working-directory: ./hono-server
-          run: npm ci
+      - name: Install Hono dependencies
+        working-directory: ./hono-server
+        run: npm ci
 
-        - name: Build the app
-          working-directory: ./hono-server
-          run: npm run build
+      - name: Build the app
+        working-directory: ./hono-server
+        run: npm run build
 
-        - name: Install Serverless Framework and Plugins
-          run: |
-            npm install -g serverless@3
-            npm install --save-dev serverless-esbuild
+      - name: Install Serverless Framework and Plugins
+        run: |
+          npm install -g serverless@3
+          npm install --save-dev serverless-esbuild
 
-        - name: Configure AWS credentials
-          uses: aws-actions/configure-aws-credentials@v4
-          with:
-            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            aws-region: ${{ secrets.AWS_REGION }}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-        - name: Deploy Hono Server to AWS Lambda
-          working-directory: ./hono-server
-          run: serverless deploy
+      - name: Deploy Hono Server to AWS Lambda
+        working-directory: ./hono-server
+        env:
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+        run: serverless deploy
